@@ -1,5 +1,5 @@
 def main():
-    print("Hello from llm-zoomcamp-code!")
+    print("Hello from llm-zoomcamp-hw2!")
 
 
 if __name__ == "__main__":
