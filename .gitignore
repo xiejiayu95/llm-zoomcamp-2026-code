@@ -8,9 +8,6 @@ wheels/
 
 # folders
 .models/
+models/
 
 # Virtual environments
-.venv
-download.py.*
-embedder.py.*
-models/
