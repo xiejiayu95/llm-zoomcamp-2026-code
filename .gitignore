@@ -11,3 +11,13 @@ wheels/
 models/
 
 # Virtual environments
+.venv
+
+# Versioned backup files
+download.py.*
+embedder.py.*
+*.py.[0-9]
+*.py.[0-9][0-9]
+
+# Jupyter
+.ipynb_checkpoints/
