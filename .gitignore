@@ -5,9 +5,12 @@ build/
 dist/
 wheels/
 *.egg-info
-not-to-commit/
+
+# folders
+.models/
 
 # Virtual environments
 .venv
-
-.env
+download.py.*
+embedder.py.*
+models/
