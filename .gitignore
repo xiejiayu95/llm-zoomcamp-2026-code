@@ -21,3 +21,5 @@ embedder.py.*
 
 # Jupyter
 .ipynb_checkpoints/
+.env
+not-to-commit/
