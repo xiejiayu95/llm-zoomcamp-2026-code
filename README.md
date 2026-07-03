@@ -17,13 +17,28 @@ llm-zoomcamp-code/
 │   ├── main.py                            # Entry point (stub)
 │   └── faq.db                             # SQLite DB for BM25/text search
 │
+├── Module 3 — Orchestration (Kestra)
+│   ├── docker-compose.yml          # Spins up Kestra + Postgres backend
+│   ├── .env                        # API keys for Kestra (not committed)
+│   └── flows/
+│       ├── 1_chat_without_rag.yaml         # Baseline: LLM query with no context
+│       ├── 2_chat_with_rag.yaml            # RAG via Kestra KV Store + Gemini embeddings
+│       ├── 3_rag_with_websearch.yaml       # RAG using live Tavily web search
+│       ├── 4_simple_agent.yaml             # Single agent: summarisation with token tracking
+│       ├── 5_web_research_agent.yaml       # Autonomous agent with web search tool
+│       └── 6_multi_agent_research.yaml     # Multi-agent: analyst + research sub-agent
+│
 ├── Module 2 — Vector Search
-│   ├── 02-vector-search.ipynb                                      # Core vector search concepts
-│   ├── 02-vector-search-reopening-the-index.ipynb                  # Persisting and reloading a vector index
+│   ├── 02-vector-search.ipynb                                         # Core vector search concepts
+│   ├── 02-vector-search-reopening-the-index.ipynb                     # Persisting and reloading a vector index
 │   ├── 02-vector-search-using-sqlitsearch-vector-search-in-RAG.ipynb  # sqlite-vec integration in RAG
-│   ├── 02-08-pgvector.ipynb                                        # pgvector (PostgreSQL) for vector search
-│   ├── sqlite-ingest.ipynb                                         # Ingesting embeddings into SQLite
-│   └── faq_vectors2.db                                             # SQLite DB storing document embeddings
+│   ├── 02-08-pgvector.ipynb                                           # pgvector (PostgreSQL) for vector search
+│   ├── sqlite-ingest.ipynb                                            # Ingesting embeddings into SQLite
+│   ├── HW02-vector-search.ipynb                                       # Homework 2 submission
+│   ├── download.py                                                    # Downloads ONNX model + tokenizer from HuggingFace
+│   ├── embedder.py                                                    # Local ONNX inference embedder (all-MiniLM-L6-v2)
+│   ├── faq_vectors2.db                                                # SQLite DB storing document embeddings
+│   └── models/Xenova/all-MiniLM-L6-v2/                               # Downloaded ONNX model files
 │
 ├── Config & Environment
 │   ├── .env                   # API keys (not committed)
@@ -91,6 +106,21 @@ Defines `RAGBase` — a reusable class that wires together search, prompt constr
 - `build_prompt(query, results)` — formats context into a prompt
 - `llm(prompt)` — sends the prompt to the OpenAI Responses API
 - `rag(query)` — end-to-end: search → prompt → answer
+
+### `03-orchestration/`
+Runs Kestra (v1.3.21) via Docker Compose with a Postgres backend. The six flows in `flows/` progress from a no-RAG baseline through RAG with static ingestion, RAG with live web search (Tavily), a single summarisation agent, an autonomous web research agent, and finally a multi-agent system where a main analyst delegates search work to a sub-agent. Uses Gemini (embedding + chat) and OpenAI interchangeably across flows. API keys (Gemini, OpenAI, Tavily) are injected as Kestra secrets via environment variables — store them in `03-orchestration/.env`.
+
+```bash
+cd 03-orchestration
+docker compose up -d
+# Kestra UI → http://localhost:8080
+```
+
+### `download.py`
+Downloads the `Xenova/all-MiniLM-L6-v2` ONNX model and tokenizer from HuggingFace Hub into `models/`. Handles multiple ONNX candidate filenames and skips files that already exist locally. Run once before using `embedder.py`.
+
+### `embedder.py`
+Local embedding inference using ONNX Runtime — no OpenAI API needed. The `Embedder` class loads the tokenizer and ONNX model from `models/`, tokenizes input text, runs a mean-pooled forward pass, and returns L2-normalized embeddings compatible with cosine similarity search.
 
 ---
 
