@@ -9,15 +9,21 @@ Personal working repository for the [LLM Zoomcamp](https://github.com/DataTalksC
 ```
 llm-zoomcamp-code/
 │
-├── Module 1 — Agentic RAG
+├── 01-agentic-rag/
 │   ├── 01-agentic-rag-environment.ipynb   # RAG pipeline walkthrough (OpenAI + minsearch)
 │   ├── HW1-agentic-RAG.ipynb              # Homework 1 submission
-│   ├── ingest.py                          # Loads FAQ data and builds a minsearch index
-│   ├── rag_helper.py                      # RAGBase class: search → prompt → LLM
-│   ├── main.py                            # Entry point (stub)
 │   └── faq.db                             # SQLite DB for BM25/text search
 │
-├── Module 3 — Orchestration (Kestra)
+├── 02-vector-search/
+│   ├── 02-vector-search.ipynb                                         # Core vector search concepts
+│   ├── 02-vector-search-reopening-the-index.ipynb                     # Persisting and reloading a vector index
+│   ├── 02-vector-search-using-sqlitsearch-vector-search-in-RAG.ipynb  # sqlite-vec integration in RAG
+│   ├── 02-08-pgvector.ipynb                                           # pgvector (PostgreSQL) for vector search
+│   ├── sqlite-ingest.ipynb                                            # Ingesting embeddings into SQLite
+│   ├── HW02-vector-search.ipynb                                       # Homework 2 submission
+│   └── faq_vectors2.db                                                # SQLite DB storing document embeddings
+│
+├── 03-orchestration/
 │   ├── docker-compose.yml          # Spins up Kestra + Postgres backend
 │   ├── .env                        # API keys for Kestra (not committed)
 │   ├── HW03-orchestration.ipynb    # Homework 3 submission
@@ -29,26 +35,19 @@ llm-zoomcamp-code/
 │       ├── 5_web_research_agent.yaml       # Autonomous agent with web search tool
 │       └── 6_multi_agent_research.yaml     # Multi-agent: analyst + research sub-agent
 │
-├── Module 2 — Vector Search
-│   ├── 02-vector-search.ipynb                                         # Core vector search concepts
-│   ├── 02-vector-search-reopening-the-index.ipynb                     # Persisting and reloading a vector index
-│   ├── 02-vector-search-using-sqlitsearch-vector-search-in-RAG.ipynb  # sqlite-vec integration in RAG
-│   ├── 02-08-pgvector.ipynb                                           # pgvector (PostgreSQL) for vector search
-│   ├── sqlite-ingest.ipynb                                            # Ingesting embeddings into SQLite
-│   ├── HW02-vector-search.ipynb                                       # Homework 2 submission
-│   ├── download.py                                                    # Downloads ONNX model + tokenizer from HuggingFace
-│   ├── embedder.py                                                    # Local ONNX inference embedder (all-MiniLM-L6-v2)
-│   ├── faq_vectors2.db                                                # SQLite DB storing document embeddings
-│   └── models/Xenova/all-MiniLM-L6-v2/                               # Downloaded ONNX model files
+├── ingest.py      # Loads FAQ data and builds a minsearch index (shared)
+├── rag_helper.py  # RAGBase class: search → prompt → LLM (shared)
+├── download.py    # Downloads ONNX model + tokenizer from HuggingFace (shared)
+├── embedder.py    # Local ONNX inference embedder — all-MiniLM-L6-v2 (shared)
+├── main.py        # Entry point (stub)
+├── models/        # Downloaded ONNX model files (Xenova/all-MiniLM-L6-v2)
 │
-├── Config & Environment
-│   ├── .env                   # API keys (not committed)
-│   ├── .gitignore
-│   ├── .python-version        # Python 3.12
-│   ├── pyproject.toml         # Project metadata and dependencies
-│   └── uv.lock                # Locked dependency versions
-│
-└── not-to-commit/             # Local secrets — never push this folder
+├── .env           # Root API keys (not committed)
+├── .gitignore
+├── .python-version
+├── pyproject.toml
+├── uv.lock
+└── not-to-commit/ # Local secrets — never push this folder
 ```
 
 ---
