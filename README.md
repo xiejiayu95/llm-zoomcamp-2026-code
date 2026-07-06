@@ -20,6 +20,7 @@ llm-zoomcamp-code/
 ├── Module 3 — Orchestration (Kestra)
 │   ├── docker-compose.yml          # Spins up Kestra + Postgres backend
 │   ├── .env                        # API keys for Kestra (not committed)
+│   ├── HW03-orchestration.ipynb    # Homework 3 submission
 │   └── flows/
 │       ├── 1_chat_without_rag.yaml         # Baseline: LLM query with no context
 │       ├── 2_chat_with_rag.yaml            # RAG via Kestra KV Store + Gemini embeddings
