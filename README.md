@@ -23,6 +23,18 @@ llm-zoomcamp-code/
 │   ├── HW02-vector-search.ipynb                                       # Homework 2 submission
 │   └── faq_vectors2.db                                                # SQLite DB storing document embeddings
 │
+├── 04-evaluation/
+│   ├── 04-evaluation.ipynb        # Ground truth generation, search evaluation, cost tracking
+│   ├── HW04-evaluation.ipynb      # Homework 4 submission
+│   ├── evaluation_utils.py        # Shared utilities: cost calc, structured LLM calls, RAGWithUsage, parallel map
+│   ├── ingest.py                  # Module-local copy (fetched from course repo)
+│   ├── rag_helper.py              # Module-local copy (fetched from course repo)
+│   ├── embedder.py                # Module-local copy
+│   ├── ground-truth.csv           # Reference ground truth dataset
+│   ├── data/
+│   │   └── ground_truth-new.csv   # Generated ground truth (LLM-produced questions per FAQ doc)
+│   └── models/                    # ONNX model files (Xenova/all-MiniLM-L6-v2)
+│
 ├── 03-orchestration/
 │   ├── docker-compose.yml          # Spins up Kestra + Postgres backend
 │   ├── .env                        # API keys for Kestra (not committed)
@@ -106,6 +118,13 @@ Defines `RAGBase` — a reusable class that wires together search, prompt constr
 - `build_prompt(query, results)` — formats context into a prompt
 - `llm(prompt)` — sends the prompt to the OpenAI Responses API
 - `rag(query)` — end-to-end: search → prompt → answer
+
+### `04-evaluation/evaluation_utils.py`
+Shared utilities for the evaluation module:
+- `llm_structured` / `llm_structured_retry` — calls the OpenAI Responses API with a Pydantic output type for structured JSON responses, with exponential backoff retry
+- `calc_price` / `calc_total_price` — calculates input/output token costs against gpt-5.4-mini pricing
+- `RAGWithUsage` — extends `RAGBase` to track per-call token usage and expose a `total_cost()` method
+- `map_progress` — parallel execution with `ThreadPoolExecutor`, with a `tqdm` progress bar
 
 ### `03-orchestration/`
 Runs Kestra (v1.3.21) via Docker Compose with a Postgres backend. The six flows in `flows/` progress from a no-RAG baseline through RAG with static ingestion, RAG with live web search (Tavily), a single summarisation agent, an autonomous web research agent, and finally a multi-agent system where a main analyst delegates search work to a sub-agent. Uses Gemini (embedding + chat) and OpenAI interchangeably across flows. API keys (Gemini, OpenAI, Tavily) are injected as Kestra secrets via environment variables — store them in `03-orchestration/.env`.
